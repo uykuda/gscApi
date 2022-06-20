@@ -1,6 +1,14 @@
 ﻿using System;
 using System.Net;
 using System.IO;
+using System.Diagnostics;
+using Konsole.Internal;
+using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
+using Konsole;
+using System.Linq;
+
 namespace Api
 {
     public class minecraft
@@ -47,14 +55,69 @@ namespace Api
                     Console.WriteLine(e);
                 }
             }
+            if (Program.serverSoftware == "purpur")
+            {
+                try
+                {
+                    using (var client = new WebClient())
+                    {
+                        DirectoryInfo minecraft = Directory.CreateDirectory(Paths.minecraftServers + Program.serverName);
+                        var value = System.Configuration.ConfigurationManager.AppSettings[Program.serverVersion + "p"];
+                        client.DownloadFile(value, Paths.minecraftServers + Program.serverName + @"\" + Program.serverName + ".jar");
+                        Console.WriteLine(Program.serverVersion + " file downloaded successfully.");
+                    }
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                }
+            }
 
+        }
+        
+        public static void runCommand()
+        {
+            Process process = new Process();
+            process.StartInfo.CreateNoWindow = true;
+            process.StartInfo.RedirectStandardOutput = true;
+            process.StartInfo.UseShellExecute = false;
+            process.StartInfo.FileName = @"cmd.exe";
+            process.StartInfo.WorkingDirectory = Paths.minecraftServers + Program.serverName + @"\";
+            process.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
+            process.StartInfo.Arguments = "/c "  + Paths.runtimeFolder + @"openjdkjre64\bin\javaw.exe " + "-jar " + Paths.minecraftServers + Program.serverName + @"\" + Program.serverName + @".jar --nogui";
+            process.StartInfo.Verb = "runas";
+            process.StartInfo.RedirectStandardInput = true;
+            process.StartInfo.RedirectStandardOutput = true;
+            process.StartInfo.RedirectStandardError = true;
+            //* Set your output and error (asynchronous) handlers
+            process.OutputDataReceived += new DataReceivedEventHandler(OutputHandler);
+            process.ErrorDataReceived += new DataReceivedEventHandler(OutputHandler);
+            //* Start process and handlers
+            process.Start();
+            process.BeginOutputReadLine();
+            process.BeginErrorReadLine();
+            while (true)
+            {
+                var sd = Console.ReadLine();
+                if (sd != "")
+                {
+                    process.StandardInput.WriteLine(sd);
+                }
+            }
+        }
+        static void OutputHandler(object sendingProcess, DataReceivedEventArgs outLine)
+        {
+            //* Do your stuff with the output (write to console/log/StringBuilder)
+            Console.WriteLine(outLine.Data);
         }
         public void minecraftLoad()
         {
+          //Console.WriteLine(Paths.minecraftServers + Program.serverName + @"\");
             Paths paths = new Paths();
-            var ini = new ini.IniFile(Paths.minecraftServers + Program.serverName + @"\" + Program.serverName + @".ini");
+            var ini = new ini.IniFile(@Paths.minecraftServers + Program.serverName + @"\" + Program.serverName + @".ini");
             string serverName = ini.Read("serverName");
             string serverPort = ini.Read("serverPort");
+            runCommand();
         }
     }
 }
