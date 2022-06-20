@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -17,6 +18,11 @@ namespace Api
 
             [DllImport("kernel32", CharSet = CharSet.Unicode)]
             static extern int GetPrivateProfileString(string Section, string Key, string Default, StringBuilder RetVal, int Size, string FilePath);
+
+            internal void Write(string v1, int v2)
+            {
+                throw new NotImplementedException();
+            }
 
             public IniFile(string IniPath = null)
             {
