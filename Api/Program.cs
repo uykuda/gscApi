@@ -15,10 +15,13 @@ namespace Api
 
         public static void helpMessage()
         {
-            Console.WriteLine("commands");
-            Console.WriteLine("commands");
-            Console.WriteLine("commands");
-            Console.WriteLine("commands");
+            Console.WriteLine(Environment.NewLine + " create a game server." + Environment.NewLine );
+            Console.WriteLine(" gsc {gameName | create/load | serverName | serverSoftware | serverVersion | serverPort}" + Environment.NewLine);
+            Console.WriteLine(" supported softwares;" + Environment.NewLine + Environment.NewLine +"  -vanilla, spigot, purpur." + Environment.NewLine);
+            Console.WriteLine(" supported vanilla versions;" + Environment.NewLine + Environment.NewLine + "  -vanilla 1.18.2 to 1.16" + Environment.NewLine);
+            Console.WriteLine(" supported spigot versions;" + Environment.NewLine + Environment.NewLine + "  -spigot 1.18.2" + Environment.NewLine);
+            Console.WriteLine(" supported purpur versions;" + Environment.NewLine + Environment.NewLine + "  -purpur 1.18.2" + Environment.NewLine);
+            Console.WriteLine(" supported games;" + Environment.NewLine + Environment.NewLine +"  -Minecraft." + Environment.NewLine);
         }
         public static void FirstStartControl()
         {
@@ -59,7 +62,14 @@ namespace Api
             minecraft minecraft = new minecraft();
             Paths paths = new Paths();
             string mod;
-            game = args[0];
+            try
+            {
+                game = args[0];
+            }
+            catch (Exception e)
+            {
+                helpMessage();
+            }
             if (game == "minecraft")
             {
                 mod = args[1];
@@ -86,6 +96,11 @@ namespace Api
                 token = args[1];
 
             }
+            if (game == "help")
+            {
+                helpMessage();
+            }
+            Environment.Exit(0);
         }
     }
 }

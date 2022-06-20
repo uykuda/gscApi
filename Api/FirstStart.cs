@@ -2,7 +2,6 @@
 using System.IO;
 using SevenZipExtractor;
 using System.Net;
-using System.Threading.Tasks;
 
 namespace Api
 {
