@@ -2,12 +2,6 @@
 using System.Net;
 using System.IO;
 using System.Diagnostics;
-using Konsole.Internal;
-using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
-using Konsole;
-using System.Linq;
 
 namespace Api
 {

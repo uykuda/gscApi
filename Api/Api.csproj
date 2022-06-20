@@ -50,9 +50,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Goblinfactory.Konsole, Version=6.2.2.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Goblinfactory.Konsole.6.2.2\lib\netstandard2.0\Goblinfactory.Konsole.dll</HintPath>
-    </Reference>
     <Reference Include="SevenZipExtractor, Version=1.0.16.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SevenZipExtractor.1.0.17\lib\net45\SevenZipExtractor.dll</HintPath>
     </Reference>
@@ -121,12 +118,10 @@
     </BootstrapperPackage>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Import Project="..\packages\7z.Libs.21.7.0\build\net\7z.Libs.targets" Condition="Exists('..\packages\7z.Libs.21.7.0\build\net\7z.Libs.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
       <ErrorText>Bu proje bu bilgisayarda olmayan NuGet paketlerine başvuru yapıyor. Bunları indirmek için NuGet Paket Geri Yükleme'yi kullanın. Daha fazla bilgi için, bkz. http://go.microsoft.com/fwlink/?LinkID=322105. Eksik dosya: {0}.</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('..\packages\7z.Libs.21.7.0\build\net\7z.Libs.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\7z.Libs.21.7.0\build\net\7z.Libs.targets'))" />
     <Error Condition="!Exists('..\packages\SevenZipExtractor.1.0.17\build\SevenZipExtractor.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\SevenZipExtractor.1.0.17\build\SevenZipExtractor.targets'))" />
   </Target>
   <Import Project="..\packages\SevenZipExtractor.1.0.17\build\SevenZipExtractor.targets" Condition="Exists('..\packages\SevenZipExtractor.1.0.17\build\SevenZipExtractor.targets')" />
