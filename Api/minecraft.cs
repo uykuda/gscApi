@@ -78,24 +78,29 @@ namespace Api
             process.StartInfo.FileName = @"cmd.exe";
             process.StartInfo.WorkingDirectory = Paths.minecraftServers + Program.serverName + @"\";
             process.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
-            process.StartInfo.Arguments = "/c "  + Paths.runtimeFolder + @"openjdkjre64\bin\javaw.exe " + "-jar " + Paths.minecraftServers + Program.serverName + @"\" + Program.serverName + @".jar --nogui";
+            process.StartInfo.Arguments = "/c "  + Paths.runtimeFolder + @"openjdkjre64\java-runtime-gamma\bin\javaw.exe " + "-jar " + Paths.minecraftServers + Program.serverName + @"\" + Program.serverName + @".jar --nogui";
             process.StartInfo.Verb = "runas";
             process.StartInfo.RedirectStandardInput = true;
             process.StartInfo.RedirectStandardOutput = true;
             process.StartInfo.RedirectStandardError = true;
-            //* Set your output and error (asynchronous) handlers
             process.OutputDataReceived += new DataReceivedEventHandler(OutputHandler);
             process.ErrorDataReceived += new DataReceivedEventHandler(OutputHandler);
-            //* Start process and handlers
             process.Start();
             process.BeginOutputReadLine();
             process.BeginErrorReadLine();
             while (true)
             {
                 var sd = Console.ReadLine();
-                if (sd != "")
+                if (sd != "stop")
                 {
                     process.StandardInput.WriteLine(sd);
+                    sd = "";
+                }
+                else
+                {
+                    process.StandardInput.WriteLine("stop");
+                    process.WaitForExit();
+                    Environment.Exit(0);
                 }
             }
         }

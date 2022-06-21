@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Net;
 using SevenZipExtractor;
 
@@ -38,6 +39,24 @@ namespace Api
                 Console.WriteLine(e);
             }
         }
-        
+        public void setToken()
+        {
+            try
+            {
+                Process process = new Process();
+            process.StartInfo.CreateNoWindow = true;
+            process.StartInfo.UseShellExecute = false;
+            process.StartInfo.FileName = @"cmd.exe";
+            process.StartInfo.WorkingDirectory = Paths.minecraftServers + Program.serverName + @"\";
+            process.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
+            process.StartInfo.Arguments = "/c " + Paths.runtimeFolder + @"ngrok\ngrok.exe ngrok config add-authtoken " + Program.token;
+            process.Start();
+            process.WaitForExit();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
+        }
     }
 }

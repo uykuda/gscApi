@@ -57,7 +57,8 @@ namespace Api
         static void Main(string[] args)
         {
             FirstStartControl();
-            
+
+            ngrok ngrok = new ngrok();
             ini ini = new ini();
             minecraft minecraft = new minecraft();
             Paths paths = new Paths();
@@ -66,7 +67,7 @@ namespace Api
             {
                 game = args[0];
             }
-            catch (Exception e)
+            catch
             {
                 helpMessage();
             }
@@ -94,12 +95,16 @@ namespace Api
             if (game == "ngrok")
             {
                 token = args[1];
-
+                ngrok.setToken(); 
             }
             if (game == "help")
             {
                 helpMessage();
             }
+            stopGSC();
+        }
+        public static void stopGSC()
+        {
             Environment.Exit(0);
         }
     }
