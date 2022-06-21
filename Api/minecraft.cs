@@ -7,7 +7,7 @@ namespace Api
 {
     public class minecraft
     {
-
+        public static string eula;
         public void minecraftCreate()
         {
             Paths paths = new Paths();
@@ -68,9 +68,74 @@ namespace Api
             }
 
         }
-        
+        public static void checkEula()
+        {
+            Console.WriteLine(@"By changing the setting below to TRUE you are indicating your agreement to our EULA (https://account.mojang.com/documents/minecraft_eula)."+Environment.NewLine+"You also agree that tacos are tasty, and the best food in the world.");
+            Console.WriteLine("Do you accept Eula.txt? Y/N");
+            string sd =Console.ReadLine();
+            if (sd !="Y")
+            {
+                Environment.Exit(0);
+            }
+            else
+            {
+                string[] Lines = File.ReadAllLines(Paths.minecraftServers + Program.serverName + @"\" + "Eula.txt");
+                File.Delete(Paths.minecraftServers + Program.serverName + @"\" + "Eula.txt");// Deleting the file
+                using (StreamWriter sw = File.AppendText(Paths.minecraftServers + Program.serverName + @"\" + "Eula.txt"))
+
+                {
+                    foreach (string line in Lines)
+                    {
+                        if (line.IndexOf("eula=false") >= 0)
+                        {
+                            continue;
+                        }
+                        else
+                        {
+                            sw.WriteLine(line);
+                            sw.WriteLine("eula=true");
+                        }
+                    }
+                }
+               
+                runCommand();
+            }
+        }
         public static void runCommand()
         {
+            if (File.Exists(Paths.minecraftServers + Program.serverName + @"\" + "Eula.txt"))
+            {
+                
+                using (StreamReader reader = new StreamReader(Paths.minecraftServers + Program.serverName + @"\" + "Eula.txt"))
+                {
+                    int i = 0;
+                    while (reader.ReadLine() != null && i < 2)
+                    {
+                        i++;
+                    }
+                    eula = reader.ReadLine();
+                    Console.WriteLine(eula);
+                }
+                if(eula == "eula=true"){
+                    goto aer;
+                }
+                else
+                {
+                    checkEula();
+                }
+            }
+            else
+            {
+                using (StreamWriter writer = new StreamWriter(Paths.minecraftServers + Program.serverName + @"\" + "Eula.txt"))
+                {
+                    writer.WriteLine("#By changing the setting below to TRUE you are indicating your agreement to our EULA (https://account.mojang.com/documents/minecraft_eula).");
+                    writer.WriteLine("#You also agree that tacos are tasty, and the best food in the world.");
+                    writer.WriteLine("eula=false");
+                }
+                checkEula();
+            }
+        aer:
+        
             Process process = new Process();
             process.StartInfo.CreateNoWindow = true;
             process.StartInfo.RedirectStandardOutput = true;
