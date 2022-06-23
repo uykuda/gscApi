@@ -1,11 +1,7 @@
 # gscApi
 
 ![](logo)
-
 ![](https://img.shields.io/github/release/pandao/editor.md.svg) ![](https://img.shields.io/github/issues/pandao/editor.md.svg)
-
-
-**Table of Contents**
 
 #Setup Ngrok
 `> gsc.exe ngrok <your authtoken>`
