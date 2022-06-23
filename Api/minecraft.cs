@@ -80,7 +80,7 @@ namespace Api
             else
             {
                 string[] Lines = File.ReadAllLines(Paths.minecraftServers + Program.serverName + @"\" + "Eula.txt");
-                File.Delete(Paths.minecraftServers + Program.serverName + @"\" + "Eula.txt");// Deleting the file
+                File.Delete(Paths.minecraftServers + Program.serverName + @"\" + "Eula.txt");
                 using (StreamWriter sw = File.AppendText(Paths.minecraftServers + Program.serverName + @"\" + "Eula.txt"))
 
                 {
@@ -103,6 +103,7 @@ namespace Api
         }
         public static void runCommand()
         {
+            ngrok ngrok = new ngrok();
             if (File.Exists(Paths.minecraftServers + Program.serverName + @"\" + "Eula.txt"))
             {
                 
@@ -135,6 +136,7 @@ namespace Api
                 checkEula();
             }
         aer:
+            ngrok.startNgrok();
         
             Process process = new Process();
             process.StartInfo.CreateNoWindow = true;
@@ -171,12 +173,10 @@ namespace Api
         }
         static void OutputHandler(object sendingProcess, DataReceivedEventArgs outLine)
         {
-            //* Do your stuff with the output (write to console/log/StringBuilder)
             Console.WriteLine(outLine.Data);
         }
         public void minecraftLoad()
         {
-          //Console.WriteLine(Paths.minecraftServers + Program.serverName + @"\");
             Paths paths = new Paths();
             var ini = new ini.IniFile(@Paths.minecraftServers + Program.serverName + @"\" + Program.serverName + @".ini");
             string serverName = ini.Read("serverName");

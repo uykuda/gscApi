@@ -11,7 +11,9 @@ namespace Api
         public static string serverVersion;
         public static string serverName;
         public static string token;
+        public static string region;
         public static int port;
+        public static string path = Paths.ProgramSettings;
 
         public static void helpMessage()
         {
@@ -25,7 +27,6 @@ namespace Api
         }
         public static void FirstStartControl()
         {
-            string path = Paths.ProgramSettings;
             if (!File.Exists(path))
             {
                 ngrok ngrok = new ngrok();
@@ -94,8 +95,16 @@ namespace Api
             }
             if (game == "ngrok")
             {
-                token = args[1];
-                ngrok.setToken(); 
+                var settingsini = new ini.IniFile(path);
+                if (!settingsini.KeyExists("tokenEntered", "Yes"))
+                {
+                    token = args[1];
+                    ngrok.setToken();
+                    settingsini.Write("tokenEntered", "Yes");
+                } else
+                {
+                    ngrok.startNgrok();
+                }
             }
             if (game == "help")
             {
