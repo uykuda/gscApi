@@ -1,11 +1,22 @@
 # gscApi
 
-<h2>log</h2>
-<pre>
-empty
-</pre>
+![](logo)
 
-<h2>screenshots</h2>
-<p align="center">
-  <img src="https://raw.githubusercontent.com/uykuda/gsc/master/screenshot1.PNG" width="988" title="gscApi screenshot">
-</p>
+![](https://img.shields.io/github/release/pandao/editor.md.svg) ![](https://img.shields.io/github/issues/pandao/editor.md.svg)
+
+
+**Table of Contents**
+
+[TOCM]
+
+[TOC]
+#Setup Ngrok
+`> gsc.exe ngrok <your authtoken>`
+#Creating minecraft server
+`> gsc.exe minecraft create <serverName> <serverSoftware> <serverVersion> <Port>`
+#Load server
+`> gsc.exe minecraft load <serverName> <Port>`
+
+#Screenshots
+<img src="https://raw.githubusercontent.com/uykuda/gsc/master/screenshot1.PNG" width="988" title="gscApi screenshot">
+#End
