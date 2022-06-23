@@ -7,9 +7,6 @@
 
 **Table of Contents**
 
-[TOCM]
-
-[TOC]
 #Setup Ngrok
 `> gsc.exe ngrok <your authtoken>`
 #Creating minecraft server
