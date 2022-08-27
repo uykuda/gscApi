@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Weavers xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="FodyWeavers.xsd">
+  <Costura IncludeDebugSymbls='false'>
+    <Unmanaged32Assemblies>
+      DiscordRPC
+      Microsoft.CSharp
+      Newtonsoft.Json
+      SevenZipExtractor
+      System.Configuration.ConfigurationManager
+      System.Security.AccessControl
+      System.Security.Permissions
+      System.Security.Principal.Windows
+    </Unmanaged32Assemblies>
+    <Unmanaged64Assemblies>
+      DiscordRPC
+      Microsoft.CSharp
+      Newtonsoft.Json
+      SevenZipExtractor
+      System.Configuration.ConfigurationManager
+      System.Security.AccessControl
+      System.Security.Permissions
+      System.Security.Principal.Windows
+    </Unmanaged64Assemblies>
+  </Costura>
+</Weavers>

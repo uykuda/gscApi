@@ -1,16 +1,50 @@
 ﻿using System;
-using System.Net;
-using System.IO;
 using System.Diagnostics;
+using System.IO;
+using System.Net;
 
 namespace Api
 {
     public class minecraft
+
     {
+        Paths Paths = new Paths();
         public static string eula;
+
+        public static void checkEula()
+        {
+
+            Console.WriteLine(@"By changing the setting below to TRUE you are indicating your agreement to our EULA (https://account.mojang.com/documents/minecraft_eula)." + Environment.NewLine + "You also agree that tacos are tasty, and the best food in the world.");
+            Console.WriteLine("Do you accept Eula.txt? Y/N");
+            string Enter = Console.ReadLine();
+            if (Enter != "Y")
+            {
+                Environment.Exit(0);
+            }
+            else
+            {
+                try
+                {
+                    using (StreamWriter sw = File.CreateText(eulaLocation))
+                    {
+                        sw.Write("eula=true");
+                    }
+                    StreamReader Oku = new StreamReader(eulaLocation);
+                    while (!Oku.EndOfStream)
+                    {
+                        Console.WriteLine(Oku.ReadLine());
+                    }
+                    Oku.Close();
+                    runCommand();
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                }
+            }
+        }
         public void minecraftCreate()
         {
-            Paths paths = new Paths();
             var ini = new ini.IniFile(Paths.minecraftServers + Program.serverName + @"\" + Program.serverName + @".ini");
             ini.Write("serverName", Program.serverName);
             ini.Write("serverSoftware", Program.serverSoftware);
@@ -23,7 +57,7 @@ namespace Api
                     using (var client = new WebClient())
                     {
                         DirectoryInfo minecraft = Directory.CreateDirectory(Paths.minecraftServers + Program.serverName);
-                        client.DownloadFile(System.Configuration.ConfigurationManager.AppSettings.Get(Program.serverVersion), Paths.minecraftServers + Program.serverName + @"\"+ Program.serverName + ".jar");
+                        client.DownloadFile(System.Configuration.ConfigurationManager.AppSettings.Get(Program.serverVersion), Paths.minecraftServers + Program.serverName + @"\" + Program.serverName + ".jar");
                         Console.WriteLine(Program.serverVersion + " file downloaded successfully.");
                     }
                 }
@@ -68,76 +102,43 @@ namespace Api
             }
 
         }
-        public static void checkEula()
+        public void minecraftLoad()
         {
-            Console.WriteLine(@"By changing the setting below to TRUE you are indicating your agreement to our EULA (https://account.mojang.com/documents/minecraft_eula)."+Environment.NewLine+"You also agree that tacos are tasty, and the best food in the world.");
-            Console.WriteLine("Do you accept Eula.txt? Y/N");
-            string sd =Console.ReadLine();
-            if (sd !="Y")
-            {
-                Environment.Exit(0);
-            }
-            else
-            {
-                string[] Lines = File.ReadAllLines(Paths.minecraftServers + Program.serverName + @"\" + "Eula.txt");
-                File.Delete(Paths.minecraftServers + Program.serverName + @"\" + "Eula.txt");
-                using (StreamWriter sw = File.AppendText(Paths.minecraftServers + Program.serverName + @"\" + "Eula.txt"))
-
-                {
-                    foreach (string line in Lines)
-                    {
-                        if (line.IndexOf("eula=false") >= 0)
-                        {
-                            continue;
-                        }
-                        else
-                        {
-                            sw.WriteLine(line);
-                            sw.WriteLine("eula=true");
-                        }
-                    }
-                }
-               
-                runCommand();
-            }
+            Paths paths = new Paths();
+            var ini = new ini.IniFile(@Paths.minecraftServers + Program.serverName + @"\" + Program.serverName + @".ini");
+            string serverName = ini.Read("serverName");
+            string serverPort = ini.Read("serverPort");
+            runCommand();
         }
+
         public static void runCommand()
         {
+            discord discord = new discord();
             ngrok ngrok = new ngrok();
-            if (File.Exists(Paths.minecraftServers + Program.serverName + @"\" + "Eula.txt"))
+
+            try
             {
-                
-                using (StreamReader reader = new StreamReader(Paths.minecraftServers + Program.serverName + @"\" + "Eula.txt"))
+                StreamReader Oku = new StreamReader(eulaLocation);
+                while (!Oku.EndOfStream)
                 {
-                    int i = 0;
-                    while (reader.ReadLine() != null && i < 2)
-                    {
-                        i++;
-                    }
-                    eula = reader.ReadLine();
-                    Console.WriteLine(eula);
+                    eula = Oku.ReadLine();
                 }
-                if(eula == "eula=true"){
-                    goto aer;
-                }
-                else
-                {
-                    checkEula();
-                }
+            }
+            catch
+            {
+
+            }
+            if (File.Exists(eulaLocation) && eula == "eula=true")
+            {
+                goto aer;
             }
             else
             {
-                using (StreamWriter writer = new StreamWriter(Paths.minecraftServers + Program.serverName + @"\" + "Eula.txt"))
-                {
-                    writer.WriteLine("#By changing the setting below to TRUE you are indicating your agreement to our EULA (https://account.mojang.com/documents/minecraft_eula).");
-                    writer.WriteLine("#You also agree that tacos are tasty, and the best food in the world.");
-                    writer.WriteLine("eula=false");
-                }
                 checkEula();
             }
         aer:
             ngrok.startNgrok();
-        
+            discord.Initialize();
             Process process = new Process();
             process.StartInfo.CreateNoWindow = true;
             process.StartInfo.RedirectStandardOutput = true;
@@ -145,7 +146,7 @@ namespace Api
             process.StartInfo.FileName = @"cmd.exe";
             process.StartInfo.WorkingDirectory = Paths.minecraftServers + Program.serverName + @"\";
             process.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
-            process.StartInfo.Arguments = "/c "  + Paths.runtimeFolder + @"openjdkjre64\java-runtime-gamma\bin\javaw.exe " + "-jar " + Paths.minecraftServers + Program.serverName + @"\" + Program.serverName + @".jar --nogui";
+            process.StartInfo.Arguments = "/c " + Paths.runtimeFolder + @"openjdkjre64\java-runtime-gamma\bin\javaw.exe " + "-jar " + Paths.minecraftServers + Program.serverName + @"\" + Program.serverName + @".jar --nogui";
             process.StartInfo.Verb = "runas";
             process.StartInfo.RedirectStandardInput = true;
             process.StartInfo.RedirectStandardOutput = true;
@@ -165,8 +166,10 @@ namespace Api
                 }
                 else
                 {
+                    Console.WriteLine("Press Ctrl+C");
                     process.StandardInput.WriteLine("stop");
                     process.WaitForExit();
+                    discord.Deinitialize();
                     Environment.Exit(0);
                 }
             }
@@ -175,13 +178,17 @@ namespace Api
         {
             Console.WriteLine(outLine.Data);
         }
-        public void minecraftLoad()
+        public static string eulaLocation
         {
-            Paths paths = new Paths();
-            var ini = new ini.IniFile(@Paths.minecraftServers + Program.serverName + @"\" + Program.serverName + @".ini");
-            string serverName = ini.Read("serverName");
-            string serverPort = ini.Read("serverPort");
-            runCommand();
+            get
+            {
+                string el = @Paths.minecraftServers + Program.serverName + @"\Eula.txt";
+                return el;
+            }
+            set
+            {
+                value = eulaLocation;
+            }
         }
     }
 }

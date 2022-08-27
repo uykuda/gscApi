@@ -1,6 +1,6 @@
-﻿using System;
+﻿using SevenZipExtractor;
+using System;
 using System.IO;
-using SevenZipExtractor;
 using System.Net;
 
 namespace Api
@@ -13,7 +13,7 @@ namespace Api
             {
                 using (var client = new WebClient())
                 {
-                    
+
                     client.DownloadFile("https://cdn.discordapp.com/attachments/986373626888585267/988219727631499294/runtime.zip", Paths.temp + "runtime.zip");
                     Console.WriteLine("Runtime downloaded successfully.");
                 }
@@ -53,7 +53,7 @@ namespace Api
             Console.WriteLine("minecraft folder created");
             DirectoryInfo temp = Directory.CreateDirectory(Paths.temp);
             Console.WriteLine("default folder created");
-            
+
         }
     }
 }

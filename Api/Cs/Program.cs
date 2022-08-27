@@ -1,11 +1,13 @@
 ﻿using System;
 using System.IO;
-using System.IO.Compression;
+using System.Reflection;
+
 namespace Api
 {
     public class Program
     {
-        public static string runLocation = System.Reflection.Assembly.GetExecutingAssembly().CodeBase;
+
+        public static string runLocation = Assembly.GetExecutingAssembly().CodeBase;
         public static string game;
         public static string serverSoftware;
         public static string serverVersion;
@@ -17,13 +19,13 @@ namespace Api
 
         public static void helpMessage()
         {
-            Console.WriteLine(Environment.NewLine + " create a game server." + Environment.NewLine );
+            Console.WriteLine(Environment.NewLine + " create a game server." + Environment.NewLine);
             Console.WriteLine(" gsc {gameName | create/load | serverName | serverSoftware | serverVersion | serverPort}" + Environment.NewLine);
-            Console.WriteLine(" supported softwares;" + Environment.NewLine + Environment.NewLine +"  -vanilla, spigot, purpur." + Environment.NewLine);
+            Console.WriteLine(" supported softwares;" + Environment.NewLine + Environment.NewLine + "  -vanilla, spigot, purpur." + Environment.NewLine);
             Console.WriteLine(" supported vanilla versions;" + Environment.NewLine + Environment.NewLine + "  -vanilla 1.18.2 to 1.16" + Environment.NewLine);
             Console.WriteLine(" supported spigot versions;" + Environment.NewLine + Environment.NewLine + "  -spigot 1.18.2" + Environment.NewLine);
             Console.WriteLine(" supported purpur versions;" + Environment.NewLine + Environment.NewLine + "  -purpur 1.18.2" + Environment.NewLine);
-            Console.WriteLine(" supported games;" + Environment.NewLine + Environment.NewLine +"  -Minecraft." + Environment.NewLine);
+            Console.WriteLine(" supported games;" + Environment.NewLine + Environment.NewLine + "  -Minecraft." + Environment.NewLine);
         }
         public static void FirstStartControl()
         {
@@ -48,7 +50,7 @@ namespace Api
             else
             {
                 var settingsini = new ini.IniFile(path);
-                if (!settingsini.KeyExists("firstStart","Program"))
+                if (!settingsini.KeyExists("firstStart", "Program"))
                 {
                     settingsini.Write("firstStart", "No");
                 }
@@ -62,6 +64,7 @@ namespace Api
             ngrok ngrok = new ngrok();
             ini ini = new ini();
             minecraft minecraft = new minecraft();
+            
             Paths paths = new Paths();
             string mod;
             try
@@ -71,6 +74,13 @@ namespace Api
             catch
             {
                 helpMessage();
+            }
+            if (game == "discord")
+            {
+                discord discord = new discord();
+                discord.Initialize();
+                Console.WriteLine("Press key for continue.");
+                Console.ReadKey();
             }
             if (game == "minecraft")
             {
@@ -101,7 +111,8 @@ namespace Api
                     token = args[1];
                     ngrok.setToken();
                     settingsini.Write("tokenEntered", "Yes");
-                } else
+                }
+                else
                 {
                     ngrok.startNgrok();
                 }
@@ -114,6 +125,15 @@ namespace Api
         }
         public static void stopGSC()
         {
+            try
+            {
+                discord discord = new discord();
+                discord.Deinitialize();
+            }
+            catch
+            {
+                Environment.Exit(0);
+            }
             Environment.Exit(0);
         }
     }

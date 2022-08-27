@@ -1,7 +1,7 @@
-﻿using System;
+﻿using SevenZipExtractor;
+using System;
 using System.Diagnostics;
 using System.Net;
-using SevenZipExtractor;
 
 namespace Api
 {
@@ -44,14 +44,14 @@ namespace Api
             try
             {
                 Process process = new Process();
-            process.StartInfo.CreateNoWindow = false;
-            process.StartInfo.UseShellExecute = true;
-            process.StartInfo.FileName = @"cmd.exe";
-            process.StartInfo.WorkingDirectory = Paths.minecraftServers + Program.serverName + @"\";
-            process.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
-            process.StartInfo.Arguments = "/c " + Paths.runtimeFolder + @"ngrok\ngrok.exe config add-authtoken " + Program.token;
-            process.Start();
-            process.WaitForExit();
+                process.StartInfo.CreateNoWindow = false;
+                process.StartInfo.UseShellExecute = true;
+                process.StartInfo.FileName = @"cmd.exe";
+                process.StartInfo.WorkingDirectory = Paths.minecraftServers + Program.serverName + @"\";
+                process.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
+                process.StartInfo.Arguments = "/c " + Paths.runtimeFolder + @"ngrok\ngrok.exe config add-authtoken " + Program.token;
+                process.Start();
+                process.WaitForExit();
             }
             catch (Exception e)
             {
