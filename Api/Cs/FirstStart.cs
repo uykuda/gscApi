@@ -30,7 +30,7 @@ namespace Api
                 Paths paths = new Paths();
                 using (ArchiveFile archiveFile = new ArchiveFile(Paths.temp + "runtime.zip"))
                 {
-                    archiveFile.Extract(Paths.runtimeFolder + "openjdkjre64"); // extract all
+                    archiveFile.Extract(Paths.runtimeFolder + "openjdkjre64"); // dosyaları çıkart
                     Console.WriteLine("Runtime installed successfully.");
                 }
             }

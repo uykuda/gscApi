@@ -128,7 +128,7 @@ namespace Api
             try
             {
                 discord discord = new discord();
-                discord.Deinitialize();
+                //discord.Deinitialize();
             }
             catch
             {
