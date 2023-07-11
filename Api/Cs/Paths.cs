@@ -16,11 +16,23 @@ namespace Api
                 value = AppData;
             }
         }
+        public static string main
+        {
+            get
+            {
+                string main = (AppData + @"\serverCreator\");
+                return main;
+            }
+            set
+            {
+                value = main;
+            }
+        }
         public static string temp
         {
             get
             {
-                string temp = (AppData + @"\serverCreator\temp\");
+                string temp = (main + @"\temp\");
                 return temp;
             }
             set
@@ -32,7 +44,7 @@ namespace Api
         {
             get
             {
-                string runtimeFolder = (AppData + @"\serverCreator\runtime\");
+                string runtimeFolder = (main + @"\runtime\");
                 return runtimeFolder;
             }
             set
@@ -44,7 +56,7 @@ namespace Api
         {
             get
             {
-                string serversFolder = (AppData + @"\serverCreator\servers\");
+                string serversFolder = (main + @"\servers\");
                 return serversFolder;
             }
             set
@@ -56,7 +68,7 @@ namespace Api
         {
             get
             {
-                string minecraftServers = (AppData + @"\serverCreator\servers\minecraft\");
+                string minecraftServers = (main + @"\servers\minecraft\");
                 return minecraftServers;
             }
             set
@@ -68,12 +80,24 @@ namespace Api
         {
             get
             {
-                string ProgramSettings = AppData + @"\serverCreator\settings.ini";
+                string ProgramSettings = main + @"\settings.ini";
                 return ProgramSettings;
             }
             set
             {
                 value = ProgramSettings;
+            }
+        }
+        public static string ngrokFolder
+        {
+            get
+            {
+                string minecraftServers = (runtimeFolder + @"\ngrok\");
+                return minecraftServers;
+            }
+            set
+            {
+                value = ngrokFolder;
             }
         }
     }

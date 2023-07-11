@@ -67,6 +67,9 @@ namespace Api
             catch (Exception e)
             {
                 Console.WriteLine(e);
+            } finally
+            {
+                
             }
         }
         public void minecraftLoad()

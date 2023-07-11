@@ -13,9 +13,9 @@ namespace Api
             {
                 using (var client = new WebClient())
                 {
-
+                    Console.WriteLine("Ngrok downloading...");
                     client.DownloadFile("https://bin.equinox.io/c/bNyj1mQVY4c/ngrok-v3-stable-windows-amd64.zip", Paths.temp + "ngrok.zip");
-                    Console.WriteLine("Ngrok downloaded successfully.");
+                    Console.WriteLine("Ngrok downloaded successfully!");
                 }
             }
             catch (Exception e)
@@ -30,8 +30,9 @@ namespace Api
                 Paths paths = new Paths();
                 using (ArchiveFile archiveFile = new ArchiveFile(Paths.temp + "ngrok.zip"))
                 {
-                    archiveFile.Extract(Paths.runtimeFolder + "ngrok"); // extract all
-                    Console.WriteLine("Ngrok installed successfully.");
+                    Console.WriteLine("Ngrok extracting...");
+                    archiveFile.Extract(Paths.ngrokFolder); // extract all
+                    Console.WriteLine("Ngrok extracted successfully!");
                 }
             }
             catch (Exception e)
@@ -49,7 +50,7 @@ namespace Api
                 process.StartInfo.FileName = @"cmd.exe";
                 process.StartInfo.WorkingDirectory = Paths.minecraftServers + Program.serverName + @"\";
                 process.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
-                process.StartInfo.Arguments = "/c " + Paths.runtimeFolder + @"ngrok\ngrok.exe config add-authtoken " + Program.token;
+                process.StartInfo.Arguments = "/c " + Paths.ngrokFolder + @"ngrok.exe config add-authtoken " + Program.token;
                 process.Start();
                 process.WaitForExit();
             }
@@ -68,7 +69,7 @@ namespace Api
                 process.StartInfo.FileName = @"cmd.exe";
                 process.StartInfo.WorkingDirectory = Paths.minecraftServers + Program.serverName + @"\";
                 process.StartInfo.WindowStyle = ProcessWindowStyle.Normal;
-                process.StartInfo.Arguments = "/c " + Paths.runtimeFolder + @"ngrok\ngrok.exe" + " tcp " + Program.port;
+                process.StartInfo.Arguments = "/c " + Paths.ngrokFolder + @"ngrok.exe" + " tcp " + Program.port;
                 process.Start();
             }
             catch (Exception e)

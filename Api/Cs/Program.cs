@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Reflection;
+using System.Security.Cryptography.X509Certificates;
 
 namespace Api
 {
@@ -8,7 +9,7 @@ namespace Api
     {
 
         public static string runLocation = Assembly.GetExecutingAssembly().CodeBase;
-        public static string game;
+        public static string firstArg;
         public static string serverSoftware;
         public static string serverVersion;
         public static string serverName;
@@ -19,6 +20,8 @@ namespace Api
 
         public static void helpMessage()
         {
+            // Console.Write(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData)); OUTPUT == C:\Users\USERNAME\AppData\Roaming
+
             Console.WriteLine(Environment.NewLine + " create a game server." + Environment.NewLine);
             Console.WriteLine(" gsc {gameName | create/load | serverName | serverSoftware | serverVersion | serverPort}" + Environment.NewLine);
             Console.WriteLine(" supported softwares;" + Environment.NewLine + Environment.NewLine + "  -vanilla, spigot, purpur." + Environment.NewLine);
@@ -37,11 +40,13 @@ namespace Api
                 var settingsini = new ini.IniFile(path);
                 settingsini.Write("firstStart", "Yes");
                 Console.WriteLine("settings file created");
+
+
                 if (!File.Exists(Paths.runtimeFolder + "windowsx64"))
                 {
                     firstStart.getRuntime();
-                    firstStart.DecompressRuntime();
                     ngrok.getNgrok();
+                    firstStart.DecompressRuntime();
                     ngrok.decompressNgrok();
                 }
                 helpMessage();
@@ -61,28 +66,31 @@ namespace Api
         {
             FirstStartControl();
 
+            minecraft minecraft = new minecraft();
             ngrok ngrok = new ngrok();
             ini ini = new ini();
-            minecraft minecraft = new minecraft();
-            
+
+
             Paths paths = new Paths();
             string mod;
+
             try
             {
-                game = args[0];
+                firstArg = args[0];
             }
-            catch
+            catch (Exception error)
             {
-                helpMessage();
+                ErrorMessage(error.Message);
             }
-            if (game == "discord")
+
+            if (firstArg == "discord")
             {
                 discord discord = new discord();
                 discord.Initialize();
-                Console.WriteLine("Press key for continue.");
+                Console.WriteLine("Press key for cancel the progress.");
                 Console.ReadKey();
             }
-            if (game == "minecraft")
+            else if (firstArg == "minecraft")
             {
                 mod = args[1];
                 if (mod == "create")
@@ -95,15 +103,14 @@ namespace Api
                                       "server software: " + serverSoftware + "\n" +
                                       "server version: " + serverVersion);
                     minecraft.minecraftCreate();
-                }
-                if (mod == "load")
+                } else if (mod == "load")
                 {
                     serverName = args[2];
                     port = Convert.ToInt32(args[3]);
                     minecraft.minecraftLoad();
                 }
             }
-            if (game == "ngrok")
+            if (firstArg == "ngrok")
             {
                 var settingsini = new ini.IniFile(path);
                 if (!settingsini.KeyExists("tokenEntered", "Yes"))
@@ -117,23 +124,31 @@ namespace Api
                     ngrok.startNgrok();
                 }
             }
-            if (game == "help")
+            if (firstArg == "help")
             {
                 helpMessage();
             }
             stopGSC();
         }
+
         public static void stopGSC()
         {
             try
             {
                 discord discord = new discord();
-                //discord.Deinitialize();
-            }
-            catch
-            {
+                discord.client.Dispose();
                 Environment.Exit(0);
             }
+            catch (Exception error)
+            {
+                ErrorMessage(error.Message);
+            }
+        }
+        public static void ErrorMessage(string err)
+        {
+            helpMessage();
+
+            Console.WriteLine("\n\nHere is the your error, contact with developer {0}" + err);
             Environment.Exit(0);
         }
     }
